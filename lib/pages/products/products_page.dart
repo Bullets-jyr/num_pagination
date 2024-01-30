@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:number_paginator/number_paginator.dart';
 
 import '../../repositories/product_repository.dart';
+import '../product/product_page.dart';
 import 'products_providers.dart';
 
 class ProductsPage extends ConsumerStatefulWidget {
@@ -31,9 +32,18 @@ class _ProductsPageState extends ConsumerState<ProductsPage> {
               itemBuilder: (BuildContext context, int index) {
                 final product = products[index];
 
-                return ListTile(
-                  title: Text(product.title),
-                  subtitle: Text(product.brand),
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) {
+                        return ProductPage(id: product.id);
+                      }),
+                    );
+                  },
+                  child: ListTile(
+                    title: Text(product.title),
+                    subtitle: Text(product.brand),
+                  ),
                 );
               },
             );
