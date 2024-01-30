@@ -15,7 +15,10 @@ class ProductRepository {
 
   ProductRepository(this.dio);
 
-  Future<List<Product>> getProducts(int page) async {
+  Future<List<Product>> getProducts(
+      int page, {
+        CancelToken? cancelToken,
+      }) async {
     try {
       final Response response = await dio.get(
         '/products',
@@ -23,6 +26,7 @@ class ProductRepository {
           'limit': limit,
           'skip': (page - 1) * limit,
         },
+        cancelToken: cancelToken,
       );
 
       if (response.statusCode != 200) {
@@ -33,9 +37,6 @@ class ProductRepository {
 
       totalProducts = response.data['total'];
 
-      // ex) totalProducts: 31, limit: 10, totalPages: 4
-      // ~/: 몫을 구하는 연산자
-      // %: 나머지를 구하는 연산자
       totalPages = totalProducts ~/ limit + (totalProducts % limit > 0 ? 1 : 0);
 
       final products = [
